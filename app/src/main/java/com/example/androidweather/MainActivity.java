@@ -42,9 +42,20 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
     private TextView textView2;
-    private TextView textView3;
-    private TextView textView4;
+    private TextView precipitation;
+    private TextView textView4;//Life紫外线
+    private TextView nowWeatherAndNumber;
+    private TextView wind;
+    private TextView humidity;
     private TextView t3;
+    private TextView temperature;
+    private TextView umbrella;
+    private TextView motion;
+    private TextView fishing;
+    private TextView carWash;
+    private TextView allergic;
+    private TextView flu;
+    private TextView city1;
     private String weatherNow1 = "https://api.seniverse.com/v3/weather/now.json?key=SX0YI9aO7VGVSFm0c&location=";
     private String weatherNow2 = "&language=zh-Hans&unit=c";
     private String weatherDaily1 = "https://api.seniverse.com/v3/weather/daily.json?key=SX0YI9aO7VGVSFm0c&location=";
@@ -74,10 +85,23 @@ public class MainActivity extends AppCompatActivity {
         });
         textView = findViewById(R.id.tv);
         textView2 = findViewById(R.id.textView);
-        textView3 = findViewById(R.id.textView3);
+        precipitation = findViewById(R.id.precipitation);
         textView4 = findViewById(R.id.textView4);
+        nowWeatherAndNumber = findViewById(R.id.nowWeatherAndNumber);
         t3 = findViewById(R.id.textView2);
-        t3.setText("数据源自:心知天气");
+        wind = findViewById(R.id.wind);
+        humidity = findViewById(R.id.humidity);
+        temperature = findViewById(R.id.temperature);
+        umbrella = findViewById(R.id.umbrella);
+        motion = findViewById(R.id.motion);
+        fishing = findViewById(R.id.fishing);
+        carWash = findViewById(R.id.carWash);
+        allergic = findViewById(R.id.allergic);
+        flu = findViewById(R.id.flu);
+
+
+        city1 = findViewById(R.id.city1);
+
         f = new File("/data/data/com.example.androidweather/shared_prefs/weatherNowData.xml");
         LocationClient.setAgreePrivacy(true);
         try {
@@ -106,24 +130,9 @@ public class MainActivity extends AppCompatActivity {
                     size()]);
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         } else {
+            //处理定位，并在定位成功或失败后进行ui处理
             mLocationClientOption();
-            if (f.exists()){
-                //存在
-                //先读文件
-                //读取文件
-                SharedPreferences weatherNowDataSP = getSharedPreferences("weatherNowData",MODE_PRIVATE);
-                SharedPreferences weatherDailyDataSP = getSharedPreferences("weatherDailyData",MODE_PRIVATE);
-                SharedPreferences weatherLifeDataSP = getSharedPreferences("weatherLifeData",MODE_PRIVATE);
-                //修改UI
-                jsonReading(weatherNowDataSP.getString("weatherNowData",""),textView);
-                jsonReading(weatherDailyDataSP.getString("weatherDailyData",""),textView2);
-                jsonReading(weatherLifeDataSP.getString("weatherLifeData",""),textView4);
-                //在发送网络请求
-            }
-
         }
-        //Toast.makeText(MainActivity.this, "您必须打开定位服务才可显示当地天气,否则默认显示北京", Toast.LENGTH_SHORT).show();
-        sendRequestWithOkHttp();
     }
     private void sendRequestWithOkHttp(){
         new Thread(new Runnable() {
@@ -198,16 +207,39 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     JSONArray jsonArray = new JSONArray(jsonObject1.getString("suggestion"));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("穿衣:").append(jsonArray.getJSONObject(0).getJSONObject("dressing").getString("brief")).append("    ");
-                    stringBuilder.append("防晒:").append(jsonArray.getJSONObject(0).getJSONObject("sunscreen").getString("brief")).append("\n");
-                    stringBuilder.append("降雨:").append(jsonArray.getJSONObject(0).getJSONObject("umbrella").getString("brief")).append("    ");
-                    stringBuilder.append("运动:").append(jsonArray.getJSONObject(0).getJSONObject("sport").getString("brief")).append("\n");
-                    stringBuilder.append("钓鱼:").append(jsonArray.getJSONObject(0).getJSONObject("fishing").getString("brief")).append("    ");
-                    stringBuilder.append("洗车:").append(jsonArray.getJSONObject(0).getJSONObject("car_washing").getString("brief")).append("\n");
-                    stringBuilder.append("过敏:").append(jsonArray.getJSONObject(0).getJSONObject("allergy").getString("brief")).append("    ");
-                    stringBuilder.append("感冒:").append(jsonArray.getJSONObject(0).getJSONObject("flu").getString("brief"));
-                    textView4.setText(stringBuilder);
+
+                    StringBuilder temperatureSB = new StringBuilder();
+                    temperatureSB.append("气温").append("\n").append(jsonArray.getJSONObject(0).getJSONObject("dressing").getString("brief"));
+                    temperature.setText(temperatureSB);
+
+                    StringBuilder UltravioletSB = new StringBuilder();
+                    UltravioletSB.append("紫外线").append("\n").append(jsonArray.getJSONObject(0).getJSONObject("sunscreen").getString("brief"));
+                    textView4.setText(UltravioletSB);
+
+                    StringBuilder umbrellaSB = new StringBuilder();
+                    umbrellaSB.append("带伞").append("\n").append(jsonArray.getJSONObject(0).getJSONObject("umbrella").getString("brief"));
+                    umbrella.setText(umbrellaSB);
+
+                    StringBuilder motionSB = new StringBuilder();
+                    motionSB.append("运动" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("sport").getString("brief"));
+                    motion.setText(motionSB);
+
+                    StringBuilder fishingSB = new StringBuilder();
+                    fishingSB.append("钓鱼" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("fishing").getString("brief"));
+                    fishing.setText(fishingSB);
+
+                    StringBuilder carWashSB = new StringBuilder();
+                    carWashSB.append("洗车" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("car_washing").getString("brief"));
+                    carWash.setText(carWashSB);
+
+                    StringBuilder allergicSB = new StringBuilder();
+                    allergicSB.append("过敏" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("allergy").getString("brief"));
+                    allergic.setText(allergicSB);
+
+                    StringBuilder fluSB = new StringBuilder();
+                    fluSB.append("感冒" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("flu").getString("brief"));
+                    flu.setText(fluSB);
+
                 } catch (JSONException e) {
                     Log.d("TAG", "Left:" + e.getMessage());
                     e.printStackTrace();
@@ -228,10 +260,26 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         stringBuilder.append("日期:").append(jsonObject.getString("date")).append("").append("  ").append(arr[i]).append("  ").append(jsonObject.getString("text_day")).append("  ").append(jsonObject.getString("low")).append("  ").append(jsonObject.getString("high")).append("\n");
                     }
-                    stringBuilder2.append("降水量:").append(jsonArray.getJSONObject(0).getString("rainfall")).append("mm").append("  ").append(jsonArray.getJSONObject(0).getString("wind_direction")).append("  ").append("风力等级:").append(jsonArray.getJSONObject(0).getString("wind_scale")).append("  ").append("湿度:").append(jsonArray.getJSONObject(0).getString("humidity")).append("%");
+                    //只需要今天数据的在这里更新
+                    //代表今天的数据
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                    stringBuilder2.append("降水量").append("\n").append(jsonObject.getString("rainfall")).append("mm");
+
+                    StringBuilder windSB = new StringBuilder();
+                    windSB.append(jsonObject.getString("wind_direction")).append("\n").append(jsonObject.getString("wind_scale")).append("级");
+
+                    StringBuilder humiditySB = new StringBuilder();
+                    humiditySB.append("湿度").append("\n").append(jsonObject.getString("humidity")).append("%");
+
+                    StringBuilder nowWeatherAndNumberSB = new StringBuilder();
+                    nowWeatherAndNumberSB.append(jsonObject.getString("text_day")).append("    ").append(jsonObject.getString("low")).append("~").append(jsonObject.getString("high"));
 
                     textView2.setText(stringBuilder);
-                    textView3.setText(stringBuilder2);
+                    precipitation.setText(stringBuilder2);
+                    nowWeatherAndNumber.setText(nowWeatherAndNumberSB);
+                    wind.setText(windSB);
+                    humidity.setText(humiditySB);
                 } catch (JSONException e) {
                     Log.d("TAG", "2" + e.getMessage());
                     e.printStackTrace();
@@ -245,10 +293,10 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("地区:").append(jsonObject.getJSONObject("location").getString("name")).append("\n");
-                    stringBuilder.append("天气:").append(jsonObject.getJSONObject("now").getString("text")).append("\n");
-                    stringBuilder.append("温度:").append(jsonObject.getJSONObject("now").getString("temperature")).append("度");
+//                    stringBuilder.append("天气:").append(jsonObject.getJSONObject("now").getString("text")).append("\n");
+                    stringBuilder.append(jsonObject.getJSONObject("now").getString("temperature"));
                     textView.setText(stringBuilder);
+                    t3.setText("数据由心知天气提供");
                 } catch (JSONException e) {
                     Log.d("TAG", "2" + e.getMessage());
                     e.printStackTrace();
@@ -305,12 +353,25 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("TAG", "onReceiveLocation: 更改城市错误");
                         e.printStackTrace();
                     }
+
+                    //存在
+                    //先读文件
+                    //读取文件
+                    SharedPreferences weatherNowDataSP1 = getSharedPreferences("weatherNowData",MODE_PRIVATE);
+                    SharedPreferences weatherDailyDataSP = getSharedPreferences("weatherDailyData",MODE_PRIVATE);
+                    SharedPreferences weatherLifeDataSP = getSharedPreferences("weatherLifeData",MODE_PRIVATE);
+                    //修改UI
+                    jsonReading(weatherNowDataSP1.getString("weatherNowData",""),textView);
+                    jsonReading(weatherDailyDataSP.getString("weatherDailyData",""),textView2);
+                    jsonReading(weatherLifeDataSP.getString("weatherLifeData",""),textView4);
+                    //在发送网络请求
                 }else {
                     city = "北京";
                     Toast.makeText(MainActivity.this, "未能成功定位,默认显示北京", Toast.LENGTH_SHORT).show();
                 }
             }else city = bdLocation.getCity().substring(0,bdLocation.getCity().length() - 1);
             sendRequestWithOkHttp();
+            city1.setText(city);
         }
 
 
