@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private String city;
 
     private TextView textView;
-    private TextView textView2;
     private TextView precipitation;
     private TextView textView4;//Life紫外线
     private TextView nowWeatherAndNumber;
@@ -55,6 +54,23 @@ public class MainActivity extends AppCompatActivity {
     private TextView carWash;
     private TextView allergic;
     private TextView flu;
+    //三日天气共12个textview组件
+    private TextView todayDateTV;
+    private TextView todayWeatherTV;
+    private TextView todayLowTV;
+    private TextView todayHighTV;
+
+    private TextView todayDateTV2;
+    private TextView todayWeatherTV2;
+    private TextView todayLowTV2;
+    private TextView todayHighTV2;
+
+    private TextView todayDateTV3;
+    private TextView todayWeatherTV3;
+    private TextView todayLowTV3;
+    private TextView todayHighTV3;
+
+
     private TextView city1;
     private String weatherNow1 = "https://api.seniverse.com/v3/weather/now.json?key=SX0YI9aO7VGVSFm0c&location=";
     private String weatherNow2 = "&language=zh-Hans&unit=c";
@@ -84,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         textView = findViewById(R.id.tv);
-        textView2 = findViewById(R.id.textView);
         precipitation = findViewById(R.id.precipitation);
         textView4 = findViewById(R.id.textView4);
         nowWeatherAndNumber = findViewById(R.id.nowWeatherAndNumber);
@@ -98,6 +113,21 @@ public class MainActivity extends AppCompatActivity {
         carWash = findViewById(R.id.carWash);
         allergic = findViewById(R.id.allergic);
         flu = findViewById(R.id.flu);
+        //三日天气12组件
+        todayDateTV = findViewById(R.id.todayDateTV);
+        todayWeatherTV = findViewById(R.id.todayWeatherTV);
+        todayLowTV = findViewById(R.id.todayLowTV);
+        todayHighTV = findViewById(R.id.todayHighTV);
+
+        todayDateTV2 = findViewById(R.id.todayDateTV2);
+        todayWeatherTV2 = findViewById(R.id.todayWeatherTV2);
+        todayLowTV2 = findViewById(R.id.todayLowTV2);
+        todayHighTV2 = findViewById(R.id.todayHighTV2);
+
+        todayDateTV3 = findViewById(R.id.todayDateTV3);
+        todayWeatherTV3 = findViewById(R.id.todayWeatherTV3);
+        todayLowTV3 = findViewById(R.id.todayLowTV3);
+        todayHighTV3 = findViewById(R.id.todayHighTV3);
 
 
         city1 = findViewById(R.id.city1);
@@ -173,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences weatherLifeDataSP = getSharedPreferences("weatherLifeData",MODE_PRIVATE);
                     //进行ui修改
                     jsonReading(weatherNowDataSP.getString("weatherNowData",""),textView);
-                    jsonReading(weatherDailyDataSP.getString("weatherDailyData",""),textView2);
+                    jsonReading(weatherDailyDataSP.getString("weatherDailyData",""),todayDateTV);
                     jsonReading(weatherLifeDataSP.getString("weatherLifeData",""),textView4);
                 } catch (Exception e) {
                     //如果没网
@@ -191,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(jsonObject.getString("results"));
             if (tv == textView){
                 weatherNowUi(jsonArray.getJSONObject(0));
-            }else if (tv == textView2){
+            }else if (tv == todayDateTV){
                 weatherDailyUi(jsonArray.getJSONObject(0));
             } else if (tv == textView4) {
                 weatherLift(jsonArray.getJSONObject(0));
@@ -253,16 +283,18 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     JSONArray jsonArray = new JSONArray(jsonObject1.getString("daily"));
-                    StringBuilder stringBuilder = new StringBuilder();
                     StringBuilder stringBuilder2 = new StringBuilder();
-                    String[] arr = new String[]{"今天","明天","后天"};
-                    for (int i = 0;i < jsonArray.length();i++){
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        stringBuilder.append("日期:").append(jsonObject.getString("date")).append("").append("  ").append(arr[i]).append("  ").append(jsonObject.getString("text_day")).append("  ").append(jsonObject.getString("low")).append("  ").append(jsonObject.getString("high")).append("\n");
-                    }
+
+
                     //只需要今天数据的在这里更新
                     //代表今天的数据
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                    todayDateTV.setText(jsonObject.getString("date").substring(5));
+                    todayWeatherTV.setText(jsonObject.getString("text_day"));
+                    todayLowTV.setText(jsonObject.getString("low"));
+                    todayHighTV.setText(jsonObject.getString("high"));
+
 
                     stringBuilder2.append("降水量").append("\n").append(jsonObject.getString("rainfall")).append("mm");
 
@@ -275,11 +307,25 @@ public class MainActivity extends AppCompatActivity {
                     StringBuilder nowWeatherAndNumberSB = new StringBuilder();
                     nowWeatherAndNumberSB.append(jsonObject.getString("text_day")).append("    ").append(jsonObject.getString("low")).append("~").append(jsonObject.getString("high"));
 
-                    textView2.setText(stringBuilder);
+
                     precipitation.setText(stringBuilder2);
                     nowWeatherAndNumber.setText(nowWeatherAndNumberSB);
                     wind.setText(windSB);
                     humidity.setText(humiditySB);
+
+                    //明天的数据
+                    JSONObject tomorrow = jsonArray.getJSONObject(1);
+                    todayDateTV2.setText(tomorrow.getString("date").substring(5));
+                    todayWeatherTV2.setText(tomorrow.getString("text_day"));
+                    todayLowTV2.setText(tomorrow.getString("low"));
+                    todayHighTV2.setText(tomorrow.getString("high"));
+
+                    //后天的数据
+                    JSONObject dayAfterTomorrow = jsonArray.getJSONObject(2);
+                    todayDateTV3.setText(dayAfterTomorrow.getString("date").substring(5));
+                    todayWeatherTV3.setText(dayAfterTomorrow.getString("text_day"));
+                    todayLowTV3.setText(dayAfterTomorrow.getString("low"));
+                    todayHighTV3.setText(dayAfterTomorrow.getString("high"));
                 } catch (JSONException e) {
                     Log.d("TAG", "2" + e.getMessage());
                     e.printStackTrace();
@@ -362,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences weatherLifeDataSP = getSharedPreferences("weatherLifeData",MODE_PRIVATE);
                     //修改UI
                     jsonReading(weatherNowDataSP1.getString("weatherNowData",""),textView);
-                    jsonReading(weatherDailyDataSP.getString("weatherDailyData",""),textView2);
+                    jsonReading(weatherDailyDataSP.getString("weatherDailyData",""),todayDateTV);
                     jsonReading(weatherLifeDataSP.getString("weatherLifeData",""),textView4);
                     //在发送网络请求
                 }else {
