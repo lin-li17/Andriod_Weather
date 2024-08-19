@@ -1,10 +1,18 @@
 package com.example.androidweather;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,11 +24,13 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +46,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
+    private ImageView backgroundView;//背景图片
+
     public LocationClient mLocationClient;//位置监听器
+
+    private SwipeRefreshLayout swipeRefreshLayout;//刷新监听
 
     private String city;
 
@@ -79,10 +93,18 @@ public class MainActivity extends AppCompatActivity {
     private String weatherLife1 = "https://api.seniverse.com/v3/life/suggestion.json?key=SX0YI9aO7VGVSFm0c&location=";
     private String weatherLife2 = "&language=zh-Hans&days=5";
 
+    private String backgroundImageUrl = "https://cn.bing.com/";
+
     private File f;
     private SharedPreferences.Editor weatherNowData;
     private SharedPreferences.Editor weatherDailyData;
     private SharedPreferences.Editor weatherLifeData;
+
+
+    private GradientDrawable gradientDrawable;//圆角设置
+    //需要设置圆角的组件
+    private GridLayout gridLayout;
+    private LinearLayout linearLayout;
 
 
 
@@ -94,11 +116,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
         textView = findViewById(R.id.tv);
         precipitation = findViewById(R.id.precipitation);
         textView4 = findViewById(R.id.textView4);
@@ -128,6 +150,54 @@ public class MainActivity extends AppCompatActivity {
         todayWeatherTV3 = findViewById(R.id.todayWeatherTV3);
         todayLowTV3 = findViewById(R.id.todayLowTV3);
         todayHighTV3 = findViewById(R.id.todayHighTV3);
+
+        //下拉刷新
+        swipeRefreshLayout = findViewById(R.id.swipeRefresh);
+        swipeRefreshLayout.setColorSchemeResources(R.color.sprBlue);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshWeathers();
+            }
+        });
+
+        backgroundView = findViewById(R.id.backgroundView);
+
+        //圆角设置
+        gradientDrawable = new GradientDrawable();
+        gradientDrawable.setShape(GradientDrawable.RECTANGLE);
+        gradientDrawable.setColor(0Xe0ffffff);
+        gradientDrawable.setCornerRadius(40);
+        //需要设置圆角的组件
+        gridLayout = findViewById(R.id.threeDay);
+        gridLayout.setBackground(gradientDrawable);
+
+        GradientDrawable gradientDrawable1 = new GradientDrawable();
+        gradientDrawable1.setShape(GradientDrawable.RECTANGLE);
+        gradientDrawable1.setColor(0Xe0ffffff);
+        gradientDrawable1.setCornerRadius(24);
+
+        linearLayout = findViewById(R.id.linearLayout);
+        linearLayout.setBackground(gradientDrawable1);
+
+        GradientDrawable gradientDrawable2 = new GradientDrawable();
+        gradientDrawable2.setShape(GradientDrawable.RECTANGLE);
+        gradientDrawable2.setColor(0Xf9ffffff);
+        gradientDrawable2.setCornerRadius(50);
+
+        GradientDrawable gradientDrawable3 = new GradientDrawable();
+        gradientDrawable3.setShape(GradientDrawable.RECTANGLE);
+        gradientDrawable3.setColor(0Xf9ffffff);
+        gradientDrawable3.setCornerRadius(50);
+
+        temperature.setBackground(gradientDrawable3);
+        umbrella.setBackground(gradientDrawable3);
+        motion.setBackground(gradientDrawable2);
+        fishing.setBackground(gradientDrawable3);
+        carWash.setBackground(gradientDrawable2);
+        allergic.setBackground(gradientDrawable3);
+        flu.setBackground(gradientDrawable2);
+        textView4.setBackground(gradientDrawable2);
 
 
         city1 = findViewById(R.id.city1);
@@ -189,6 +259,13 @@ public class MainActivity extends AppCompatActivity {
                     Response response3 = client.newCall(request3).execute();
                     String responseData3 = response3.body().string();
 
+                    //背景图
+                    Request backgroundImageRt = new Request.Builder()
+                            .url("https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN")
+                            .build();
+                    Response backgroundImageRtData = client.newCall(backgroundImageRt).execute();
+                    String backgroundImageStr = backgroundImageRtData.body().string();
+
                     //写入文件
                     weatherNowData.putString("weatherNowData",responseData);
                     weatherDailyData.putString("weatherDailyData",responseData2);
@@ -205,6 +282,11 @@ public class MainActivity extends AppCompatActivity {
                     jsonReading(weatherNowDataSP.getString("weatherNowData",""),textView);
                     jsonReading(weatherDailyDataSP.getString("weatherDailyData",""),todayDateTV);
                     jsonReading(weatherLifeDataSP.getString("weatherLifeData",""),textView4);
+
+                    //对背景图进行修改
+                    JSONObject imageUrlJSON = new JSONObject(backgroundImageStr);
+                    JSONArray jsonArray1 = new JSONArray(imageUrlJSON.getString("images"));
+                    setBackgroundImageView(jsonArray1.getJSONObject(0));
                 } catch (Exception e) {
                     //如果没网
                     toastUi();
@@ -215,13 +297,13 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void jsonReading(String jsonData,TextView tv) {
+    private void jsonReading(String jsonData,View tv) {
         try {
             JSONObject jsonObject = new JSONObject(jsonData);
             JSONArray jsonArray = new JSONArray(jsonObject.getString("results"));
             if (tv == textView){
                 weatherNowUi(jsonArray.getJSONObject(0));
-            }else if (tv == todayDateTV){
+            } else if (tv == todayDateTV){
                 weatherDailyUi(jsonArray.getJSONObject(0));
             } else if (tv == textView4) {
                 weatherLift(jsonArray.getJSONObject(0));
@@ -231,6 +313,20 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    private void setBackgroundImageView(JSONObject jsonObject1){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Picasso.get().load(backgroundImageUrl + jsonObject1.getString("url"))
+                            .into(backgroundView);
+                } catch (JSONException e) {
+                    Log.d("TAG", "url:" + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
     private void weatherLift(JSONObject jsonObject1){
         runOnUiThread(new Runnable() {
             @Override
@@ -239,35 +335,35 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(jsonObject1.getString("suggestion"));
 
                     StringBuilder temperatureSB = new StringBuilder();
-                    temperatureSB.append("气温").append("\n").append(jsonArray.getJSONObject(0).getJSONObject("dressing").getString("brief"));
+                    temperatureSB.append("气温" + "\n").append("\n").append(jsonArray.getJSONObject(0).getJSONObject("dressing").getString("brief"));
                     temperature.setText(temperatureSB);
 
                     StringBuilder UltravioletSB = new StringBuilder();
-                    UltravioletSB.append("紫外线").append("\n").append(jsonArray.getJSONObject(0).getJSONObject("sunscreen").getString("brief"));
+                    UltravioletSB.append("紫外线" + "\n").append("\n").append(jsonArray.getJSONObject(0).getJSONObject("sunscreen").getString("brief"));
                     textView4.setText(UltravioletSB);
 
                     StringBuilder umbrellaSB = new StringBuilder();
-                    umbrellaSB.append("带伞").append("\n").append(jsonArray.getJSONObject(0).getJSONObject("umbrella").getString("brief"));
+                    umbrellaSB.append("带伞" + "\n").append("\n").append(jsonArray.getJSONObject(0).getJSONObject("umbrella").getString("brief"));
                     umbrella.setText(umbrellaSB);
 
                     StringBuilder motionSB = new StringBuilder();
-                    motionSB.append("运动" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("sport").getString("brief"));
+                    motionSB.append("运动" + "\n" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("sport").getString("brief"));
                     motion.setText(motionSB);
 
                     StringBuilder fishingSB = new StringBuilder();
-                    fishingSB.append("钓鱼" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("fishing").getString("brief"));
+                    fishingSB.append("钓鱼" + "\n" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("fishing").getString("brief"));
                     fishing.setText(fishingSB);
 
                     StringBuilder carWashSB = new StringBuilder();
-                    carWashSB.append("洗车" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("car_washing").getString("brief"));
+                    carWashSB.append("洗车" + "\n" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("car_washing").getString("brief"));
                     carWash.setText(carWashSB);
 
                     StringBuilder allergicSB = new StringBuilder();
-                    allergicSB.append("过敏" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("allergy").getString("brief"));
+                    allergicSB.append("过敏" + "\n" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("allergy").getString("brief"));
                     allergic.setText(allergicSB);
 
                     StringBuilder fluSB = new StringBuilder();
-                    fluSB.append("感冒" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("flu").getString("brief"));
+                    fluSB.append("感冒" + "\n" + "\n").append(jsonArray.getJSONObject(0).getJSONObject("flu").getString("brief"));
                     flu.setText(fluSB);
 
                 } catch (JSONException e) {
@@ -284,7 +380,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONArray jsonArray = new JSONArray(jsonObject1.getString("daily"));
                     StringBuilder stringBuilder2 = new StringBuilder();
-
 
                     //只需要今天数据的在这里更新
                     //代表今天的数据
@@ -385,6 +480,7 @@ public class MainActivity extends AppCompatActivity {
     public class MyLocationListener implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
+            TextView locationTV = findViewById(R.id.locationTV);
             if (bdLocation.getCity() == "" || bdLocation.getCity() == null){
                 if(f.exists()){
                     //存在
@@ -415,7 +511,11 @@ public class MainActivity extends AppCompatActivity {
                     city = "北京";
                     Toast.makeText(MainActivity.this, "未能成功定位,默认显示北京", Toast.LENGTH_SHORT).show();
                 }
-            }else city = bdLocation.getCity().substring(0,bdLocation.getCity().length() - 1);
+                locationTV.setText("请打开位置服务");
+            }else {
+                city = bdLocation.getCity().substring(0,bdLocation.getCity().length() - 1);
+                locationTV.setText(" ");
+            }
             sendRequestWithOkHttp();
             city1.setText(city);
         }
@@ -429,5 +529,30 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"网络错误,请检查网络连接",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void refreshWeathers(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLocationClient.requestLocation();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocationClient.stop();
     }
 }

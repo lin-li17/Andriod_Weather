@@ -1,405 +1,485 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@color/sprBlue"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <ImageView
+        android:id="@+id/backgroundView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:background="#00ffffff"
-        tools:ignore="MissingConstraints">
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
 
-        <TextView
-            android:id="@+id/city1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:fitsSystemWindows="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#30ffffff"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="+"
-            android:textSize="20dp"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#50A29EA1"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="27">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="#00ffffff"
+            tools:ignore="MissingConstraints">
 
             <TextView
-                android:id="@+id/tv"
+                android:id="@+id/locationTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="120dp"
-                android:text=""
-                android:textSize="60dp"
+                android:textSize="8dp"
+                android:textColor="#90000000"
+                app:layout_constraintEnd_toEndOf="@+id/city1"
+                app:layout_constraintStart_toStartOf="@+id/city1"
+                app:layout_constraintTop_toBottomOf="@+id/city1" />
+
+            <TextView
+                android:id="@+id/city1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="西安"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="120dp"
-                android:text="℃"
-                android:textColor="#50000000"
-                android:textSize="30dp"
-                app:layout_constraintStart_toEndOf="@+id/tv"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
+                android:layout_marginStart="20dp"
+                android:clickable="true"
+                android:text="+"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/nowWeatherAndNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv"
-                tools:ignore="MissingConstraints" />
-
-
-            <GridLayout
-                android:id="@+id/threeDay"
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="5"
-                android:rowCount="3"
-                tools:ignore="MissingConstraints"
-                android:layout_marginTop="120dp"
+                android:layout_height="2dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#50A29EA1"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nowWeatherAndNumber">
-                <TextView
-                    android:id="@+id/todayDateTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="2"
-                    android:gravity="center"
-                    android:text="今日日期" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="今天"
-                    android:textColor="#50000000"
-                    android:layout_columnWeight="1"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/todayWeatherTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="今天天气"
-                    android:layout_columnWeight="8"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/todayLowTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="低温"
-                    android:textColor="#50000000"
-                    android:layout_columnWeight="2"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/todayHighTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="高温"
-                    android:layout_columnWeight="2"
-                    android:gravity="center"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:id="@+id/todayDateTV2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="2"
-                    android:gravity="center"
-                    android:text="明天日期" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="明天"
-                    android:textColor="#50000000"
-                    android:layout_columnWeight="1"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/todayWeatherTV2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="明天天气"
-                    android:layout_columnWeight="8"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/todayLowTV2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="低温"
-                    android:textColor="#50000000"
-                    android:layout_columnWeight="2"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/todayHighTV2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="高温"
-                    android:layout_columnWeight="2"
-                    android:gravity="center"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="27">
 
-                <TextView
-                    android:id="@+id/todayDateTV3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="2"
-                    android:gravity="center"
-                    android:text="后天日期" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="后天"
-                    android:textColor="#50000000"
-                    android:layout_columnWeight="1"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/todayWeatherTV3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="后天天气"
-                    android:layout_columnWeight="8"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/todayLowTV3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="低温"
-                    android:textColor="#50000000"
-                    android:layout_columnWeight="2"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/todayHighTV3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="高温"
-                    android:layout_columnWeight="2"
-                    android:gravity="center"/>
-
-
-
-
-            </GridLayout>
-
-
-
-            <LinearLayout
-                android:id="@+id/linearLayout"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/threeDay"
-                tools:ignore="MissingConstraints">
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/precipitation"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="降水量" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/wind"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="风向" />
+                    <TextView
+                        android:id="@+id/tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="120dp"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="60dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.501"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/humidity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="湿度" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="120dp"
+                        android:text="℃"
+                        android:textColor="#50000000"
+                        android:textSize="30dp"
+                        app:layout_constraintStart_toEndOf="@+id/tv"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="MissingConstraints" />
 
-
-            <GridLayout
-                android:id="@+id/gridLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:columnCount="2"
-                android:rowCount="4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-                tools:ignore="MissingConstraints">
-
-                <TextView
-                    android:id="@+id/temperature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center"
-                    android:text="气温" />
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center"
-                    android:text="紫外线" />
-
-                <TextView
-                    android:id="@+id/umbrella"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center"
-                    android:text="雨伞" />
-
-                <TextView
-                    android:id="@+id/motion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center"
-                    android:text="运动" />
-
-                <TextView
-                    android:id="@+id/fishing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center"
-                    android:text="钓鱼" />
-
-                <TextView
-                    android:id="@+id/carWash"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center"
-                    android:text="洗车" />
-
-                <TextView
-                    android:id="@+id/allergic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center"
-                    android:text="过敏" />
-
-                <TextView
-                    android:id="@+id/flu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:gravity="center"
-                    android:text="感冒" />
+                    <TextView
+                        android:id="@+id/nowWeatherAndNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv"
+                        tools:ignore="MissingConstraints" />
 
 
-            </GridLayout>
+                    <GridLayout
+                        android:id="@+id/threeDay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="120dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@color/white"
+
+                        android:columnCount="5"
+                        android:rowCount="3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/nowWeatherAndNumber"
+                        tools:ignore="MissingConstraints">
+
+                        <TextView
+                            android:id="@+id/todayDateTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="2"
+                            android:gravity="center"
+                            android:text="今日日期" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:gravity="center"
+                            android:text="今天"
+                            android:textColor="#50000000" />
+
+                        <TextView
+                            android:id="@+id/todayWeatherTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="8"
+                            android:gravity="center"
+                            android:text="今天天气" />
+
+                        <TextView
+                            android:id="@+id/todayLowTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="2"
+                            android:gravity="center"
+                            android:text="低温"
+                            android:textColor="#50000000" />
+
+                        <TextView
+                            android:id="@+id/todayHighTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="2"
+                            android:gravity="center"
+                            android:text="高温" />
+
+                        <TextView
+                            android:id="@+id/todayDateTV2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="2"
+                            android:gravity="center"
+                            android:text="明天日期" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:gravity="center"
+                            android:text="明天"
+                            android:textColor="#50000000" />
+
+                        <TextView
+                            android:id="@+id/todayWeatherTV2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="8"
+                            android:gravity="center"
+                            android:text="明天天气" />
+
+                        <TextView
+                            android:id="@+id/todayLowTV2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="2"
+                            android:gravity="center"
+                            android:text="低温"
+                            android:textColor="#50000000" />
+
+                        <TextView
+                            android:id="@+id/todayHighTV2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="2"
+                            android:gravity="center"
+                            android:text="高温" />
+
+
+                        <TextView
+                            android:id="@+id/todayDateTV3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="2"
+                            android:gravity="center"
+                            android:text="后天日期" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:gravity="center"
+                            android:text="后天"
+                            android:textColor="#50000000" />
+
+                        <TextView
+                            android:id="@+id/todayWeatherTV3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="8"
+                            android:gravity="center"
+                            android:text="后天天气" />
+
+                        <TextView
+                            android:id="@+id/todayLowTV3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="2"
+                            android:gravity="center"
+                            android:text="低温"
+                            android:textColor="#50000000" />
+
+                        <TextView
+                            android:id="@+id/todayHighTV3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="2"
+                            android:gravity="center"
+                            android:text="高温" />
+
+
+                    </GridLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="60dp"
+                        android:layout_marginEnd="40dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/threeDay"
+                        tools:ignore="MissingConstraints">
+
+                        <TextView
+                            android:id="@+id/precipitation"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="100"
+                            android:gravity="center"
+                            android:text="降水量" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="#2f000000"
+                            />
+
+                        <TextView
+                            android:id="@+id/wind"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="100"
+                            android:gravity="center"
+                            android:text="风向" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="#2f000000"
+                             />
+
+                        <TextView
+                            android:id="@+id/humidity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="100"
+                            android:gravity="center"
+                            android:text="湿度" />
+                    </LinearLayout>
+
+
+                    <GridLayout
+                        android:id="@+id/gridLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="60dp"
+                        android:columnCount="2"
+                        android:rowCount="4"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                        tools:ignore="MissingConstraints">
+
+                        <TextView
+                            android:id="@+id/temperature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="80dp"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center"
+                            android:text="气温" />
+
+                        <TextView
+                            android:id="@+id/textView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="80dp"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center"
+                            android:text="紫外线" />
+
+                        <TextView
+                            android:id="@+id/umbrella"
+                            android:layout_width="wrap_content"
+                            android:layout_height="80dp"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center"
+                            android:text="雨伞" />
+
+                        <TextView
+                            android:id="@+id/motion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="80dp"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center"
+                            android:text="运动" />
+
+                        <TextView
+                            android:id="@+id/fishing"
+                            android:layout_width="wrap_content"
+                            android:layout_height="80dp"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center"
+                            android:text="钓鱼" />
+
+                        <TextView
+                            android:id="@+id/carWash"
+                            android:layout_width="wrap_content"
+                            android:layout_height="80dp"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center"
+                            android:text="洗车" />
+
+                        <TextView
+                            android:id="@+id/allergic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="80dp"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center"
+                            android:text="过敏" />
+
+                        <TextView
+                            android:id="@+id/flu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="80dp"
+                            android:layout_rowWeight="1"
+                            android:layout_columnWeight="1"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center"
+                            android:text="感冒" />
+
+
+                    </GridLayout>
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="数据来源"
+                        android:textColor="#55000000"
+                        android:textSize="10dp"
+                        android:background="#e0ffffff"
+                        android:gravity="center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/gridLayout"
+                        tools:ignore="MissingConstraints" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#00ffffff"
+            tools:ignore="MissingConstraints">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/city11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="数据来源"
-                android:textColor="#55000000"
-                android:textSize="10dp"
+                android:text="导航栏"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gridLayout"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#00ffffff"
-        tools:ignore="MissingConstraints">
-
-        <TextView
-            android:id="@+id/city11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="导航栏"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</LinearLayout>
+</FrameLayout>
