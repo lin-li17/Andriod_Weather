@@ -182,12 +182,12 @@ public class MainActivity extends AppCompatActivity {
 
         GradientDrawable gradientDrawable2 = new GradientDrawable();
         gradientDrawable2.setShape(GradientDrawable.RECTANGLE);
-        gradientDrawable2.setColor(0Xf9ffffff);
+        gradientDrawable2.setColor(0Xf0f1f1f1);
         gradientDrawable2.setCornerRadius(50);
 
         GradientDrawable gradientDrawable3 = new GradientDrawable();
         gradientDrawable3.setShape(GradientDrawable.RECTANGLE);
-        gradientDrawable3.setColor(0Xf9ffffff);
+        gradientDrawable3.setColor(0Xf0f1f1f1);
         gradientDrawable3.setCornerRadius(50);
 
         temperature.setBackground(gradientDrawable3);
@@ -198,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
         allergic.setBackground(gradientDrawable3);
         flu.setBackground(gradientDrawable2);
         textView4.setBackground(gradientDrawable2);
+
+        //
 
 
         city1 = findViewById(R.id.city1);

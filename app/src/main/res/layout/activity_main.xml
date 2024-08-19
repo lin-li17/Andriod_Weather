@@ -108,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="120dp"
                         android:text="℃"
-                        android:textColor="#50000000"
+                        android:textColor="#90ffffff"
                         android:textSize="30dp"
                         app:layout_constraintStart_toEndOf="@+id/tv"
                         app:layout_constraintTop_toTopOf="parent"
