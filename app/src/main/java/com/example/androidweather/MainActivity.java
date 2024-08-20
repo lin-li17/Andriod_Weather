@@ -1,7 +1,9 @@
 package com.example.androidweather;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -10,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -46,6 +50,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE = 1;
+
     private ImageView backgroundView;//背景图片
 
     public LocationClient mLocationClient;//位置监听器
@@ -60,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView nowWeatherAndNumber;
     private TextView wind;
     private TextView humidity;
-    private TextView t3;
     private TextView temperature;
     private TextView umbrella;
     private TextView motion;
@@ -121,11 +126,11 @@ public class MainActivity extends AppCompatActivity {
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 //            return insets;
 //        });
+
         textView = findViewById(R.id.tv);
         precipitation = findViewById(R.id.precipitation);
         textView4 = findViewById(R.id.textView4);
         nowWeatherAndNumber = findViewById(R.id.nowWeatherAndNumber);
-        t3 = findViewById(R.id.textView2);
         wind = findViewById(R.id.wind);
         humidity = findViewById(R.id.humidity);
         temperature = findViewById(R.id.temperature);
@@ -232,6 +237,37 @@ public class MainActivity extends AppCompatActivity {
                     size()]);
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         } else {
+            //设置默认背景
+            Picasso.get()
+                    .load(R.drawable.bing)
+                    .into(backgroundView);
+
+            if(f.exists()) {
+                //存在读取文件
+                SharedPreferences weatherNowDataSP = getSharedPreferences("weatherNowData", MODE_PRIVATE);
+                JSONObject jsonObject;
+                try {
+                    jsonObject = new JSONObject(weatherNowDataSP.getString("weatherNowData", ""));
+                    JSONArray jsonArray = new JSONArray(jsonObject.getString("results"));
+                    city = jsonArray.getJSONObject(0).getJSONObject("location").getString("name");
+                    Toast.makeText(MainActivity.this, "请打开定位服务", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    Log.d("TAG", "onReceiveLocation: 更改城市错误");
+                    e.printStackTrace();
+                }
+                //存在
+                //先读文件
+                //读取文件
+                SharedPreferences weatherNowDataSP1 = getSharedPreferences("weatherNowData", MODE_PRIVATE);
+                SharedPreferences weatherDailyDataSP = getSharedPreferences("weatherDailyData", MODE_PRIVATE);
+                SharedPreferences weatherLifeDataSP = getSharedPreferences("weatherLifeData", MODE_PRIVATE);
+                //修改UI
+                jsonReading(weatherNowDataSP1.getString("weatherNowData", ""), textView);
+                jsonReading(weatherDailyDataSP.getString("weatherDailyData", ""), todayDateTV);
+                jsonReading(weatherLifeDataSP.getString("weatherLifeData", ""), textView4);
+                city1.setText(city);
+                //在发送网络请求
+            }
             //处理定位，并在定位成功或失败后进行ui处理
             mLocationClientOption();
         }
@@ -320,7 +356,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Picasso.get().load(backgroundImageUrl + jsonObject1.getString("url"))
+                    Picasso.get()
+                            .load(backgroundImageUrl + jsonObject1.getString("url"))
                             .into(backgroundView);
                 } catch (JSONException e) {
                     Log.d("TAG", "url:" + e.getMessage());
@@ -396,7 +433,11 @@ public class MainActivity extends AppCompatActivity {
                     stringBuilder2.append("降水量").append("\n").append(jsonObject.getString("rainfall")).append("mm");
 
                     StringBuilder windSB = new StringBuilder();
-                    windSB.append(jsonObject.getString("wind_direction")).append("\n").append(jsonObject.getString("wind_scale")).append("级");
+                    windSB.append(jsonObject.getString("wind_direction"));
+                    if (!jsonObject.getString("wind_direction").equals("无持续风向")){
+                        windSB.append("风");
+                    }
+                    windSB.append("\n").append(jsonObject.getString("wind_scale")).append("级");
 
                     StringBuilder humiditySB = new StringBuilder();
                     humiditySB.append("湿度").append("\n").append(jsonObject.getString("humidity")).append("%");
@@ -439,7 +480,6 @@ public class MainActivity extends AppCompatActivity {
 //                    stringBuilder.append("天气:").append(jsonObject.getJSONObject("now").getString("text")).append("\n");
                     stringBuilder.append(jsonObject.getJSONObject("now").getString("temperature"));
                     textView.setText(stringBuilder);
-                    t3.setText("数据由心知天气提供");
                 } catch (JSONException e) {
                     Log.d("TAG", "2" + e.getMessage());
                     e.printStackTrace();
@@ -484,37 +524,14 @@ public class MainActivity extends AppCompatActivity {
         public void onReceiveLocation(BDLocation bdLocation) {
             TextView locationTV = findViewById(R.id.locationTV);
             if (bdLocation.getCity() == "" || bdLocation.getCity() == null){
-                if(f.exists()){
-                    //存在
-                    SharedPreferences weatherNowDataSP = getSharedPreferences("weatherNowData",MODE_PRIVATE);
-                    JSONObject jsonObject;
-                    try {
-                        jsonObject = new JSONObject(weatherNowDataSP.getString("weatherNowData",""));
-                        JSONArray jsonArray = new JSONArray(jsonObject.getString("results"));
-                        city = jsonArray.getJSONObject(0).getJSONObject("location").getString("name");
-                        Toast.makeText(MainActivity.this,"请打开定位服务",Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        Log.d("TAG", "onReceiveLocation: 更改城市错误");
-                        e.printStackTrace();
-                    }
-
-                    //存在
-                    //先读文件
-                    //读取文件
-                    SharedPreferences weatherNowDataSP1 = getSharedPreferences("weatherNowData",MODE_PRIVATE);
-                    SharedPreferences weatherDailyDataSP = getSharedPreferences("weatherDailyData",MODE_PRIVATE);
-                    SharedPreferences weatherLifeDataSP = getSharedPreferences("weatherLifeData",MODE_PRIVATE);
-                    //修改UI
-                    jsonReading(weatherNowDataSP1.getString("weatherNowData",""),textView);
-                    jsonReading(weatherDailyDataSP.getString("weatherDailyData",""),todayDateTV);
-                    jsonReading(weatherLifeDataSP.getString("weatherLifeData",""),textView4);
-                    //在发送网络请求
-                }else {
+                if(!f.exists()){
+                    //不存在
                     city = "北京";
                     Toast.makeText(MainActivity.this, "未能成功定位,默认显示北京", Toast.LENGTH_SHORT).show();
                 }
                 locationTV.setText("请打开位置服务");
             }else {
+                //定位到了该city
                 city = bdLocation.getCity().substring(0,bdLocation.getCity().length() - 1);
                 locationTV.setText(" ");
             }
@@ -551,7 +568,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+    //添加城市页面跳转
+    public void addTvClick(View view){
+        Intent intent = new Intent(MainActivity.this , searchActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                String result = data.getStringExtra("stringKey");
+                // 执行你自定义的方法
+                setCity(result);
+            }
+        }
+    }
+    private void setCity(String str){
+        city = str;
+        city1.setText(city);
+        sendRequestWithOkHttp();
+    }
+
+    //活动结束时需要结束的一切都要写
     @Override
     protected void onDestroy() {
         super.onDestroy();
