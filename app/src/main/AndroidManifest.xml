@@ -28,6 +28,9 @@
         android:theme="@style/Theme.AndroidWeather"
         tools:targetApi="31">
         <activity
+            android:name=".fragmentActivity"
+            android:exported="false" />
+        <activity
             android:name=".searchActivity"
             android:exported="false" />
 
