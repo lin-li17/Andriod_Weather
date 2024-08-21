@@ -6,6 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".searchActivity">
+    <TextView
+        android:id="@+id/searchTV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"/>
 
     <LinearLayout
         android:layout_width="match_parent"

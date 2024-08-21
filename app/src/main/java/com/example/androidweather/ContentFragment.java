@@ -351,7 +351,7 @@ public class ContentFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(1000);
                     // 回到主线程
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override

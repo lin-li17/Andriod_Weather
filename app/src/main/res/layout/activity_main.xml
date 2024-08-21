@@ -66,6 +66,19 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="-"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:onClick="removeList"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
@@ -75,6 +88,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,6 +115,30 @@
             android:background="#00ffffff"
             android:orientation="horizontal"
             tools:ignore="MissingConstraints">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:text="📍"
+                android:textSize="10dp"
+                android:background="#20ffffff"
+                android:gravity="center"
+                android:clickable="true"
+                android:onClick="setRequestLocation"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="30"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:text="🏠"
+                android:background="#20ffffff"
+                android:textSize="10dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:onClick="setFragmentHome"/>
 
 
         </LinearLayout>

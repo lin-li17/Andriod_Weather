@@ -1,17 +1,19 @@
 package com.example.androidweather;
 
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContentPagerAdapter extends FragmentStateAdapter {
     private List<ContentFragment> datas = new ArrayList<>();
+
 
     public ContentPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -33,17 +35,22 @@ public class ContentPagerAdapter extends FragmentStateAdapter {
         notifyDataSetChanged();
 
     }
-    public void removeData(int position){
+    public boolean removeData(int position){
         if (position >= 1 && position < datas.size()) {
+            datas.get(position).deleteData();
             datas.remove(position);
-            notifyDataSetChanged();
-        }
+            notifyItemRemoved(position);//通知这个项被删除了
+            notifyItemRangeChanged(position, datas.size() - position);//通知后面的位置被改变了
+            return true;
+        }else return false;
     }
     //修改
     public void setDatas(int i,ContentFragment contentFragment){
         //先删除文件
         datas.get(i).deleteData();
+
         datas.set(i,contentFragment);
         notifyDataSetChanged();
     }
+
 }

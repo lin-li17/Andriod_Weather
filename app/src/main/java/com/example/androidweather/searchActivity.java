@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -34,6 +35,7 @@ public class searchActivity extends AppCompatActivity {
     private EditText searchCity;
 
     private GridLayout gridLayout;//网格布局实例
+    private TextView searchTV;
 
     //用户输入
     private String searchCityStr;
@@ -55,6 +57,7 @@ public class searchActivity extends AppCompatActivity {
         });
         searchCity = findViewById(R.id.searchCity);
         gridLayout = findViewById(R.id.gridLayout);
+        searchTV = findViewById(R.id.searchTV);
     }
 
     //搜索的点击事件
@@ -69,6 +72,7 @@ public class searchActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+                    searchTV.setText("");
                     HashMap<String,String> map = new HashMap<>();
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
@@ -78,31 +82,52 @@ public class searchActivity extends AppCompatActivity {
                     String responseData = response1.body().string();
                     //处理json文件
                     JSONObject jsonObject = new JSONObject(responseData);
-                    JSONArray jsonArray = new JSONArray(jsonObject.getString("results"));
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        String str = jsonArray.getJSONObject(i).getString("path");
-                        int a = str.indexOf(',',0);
-                        str = str.substring(a + 1);
-                        if (str.substring(str.length() - 2).equals("中国")){
-                            String city = str.substring(0, str.indexOf(',', 0));
-                            if (!map.containsKey(str)) {
-                                //不存在
-                                //添加
-                                map.put(str, city);
+                    if (jsonObject.has("status")){
+                        unSearch();
+                    }else {
+                        JSONArray jsonArray = new JSONArray(jsonObject.getString("results"));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            String str = jsonArray.getJSONObject(i).getString("path");
+                            int a = str.indexOf(',', 0);
+                            str = str.substring(a + 1);
+                            if (str.substring(str.length() - 2).equals("中国")) {
+                                String city = str.substring(0, str.indexOf(',', 0));
+                                if (!map.containsKey(str)) {
+                                    //不存在
+                                    //添加
+                                    map.put(str, city);
+                                }
                             }
                         }
+                        gridLayoutAdd(map);
                     }
-                    gridLayoutAdd(map);
                 } catch (IOException e) {
                     toastUi();
                     e.printStackTrace();
                 } catch (JSONException e) {
-                    Log.d("TAG", "run: 处理文件异常");
+                    toastJSONUi();
+                    Log.d("TAG", "run: 处理文件异常:" + e.getMessage());
                     e.printStackTrace();
                 }
 
             }
         }).start();
+    }
+    private void unSearch(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                searchTV.setText("无搜索结果");
+            }
+        });
+    }
+    private void toastJSONUi(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(searchActivity.this, "搜索频繁,请尝试更换关键词", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     //城市选择
@@ -110,6 +135,7 @@ public class searchActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 gridLayout.removeAllViews();
                 for (Map.Entry<String,String> entry : map.entrySet()){
                     GradientDrawable gradientDrawable = new GradientDrawable();
