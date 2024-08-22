@@ -49,6 +49,7 @@ public class ContentPagerAdapter extends FragmentStateAdapter {
             return true;
         }else return false;
     }
+    //
     //修改
     public void setDatas(int i,ContentFragment contentFragment){
         //先删除文件
