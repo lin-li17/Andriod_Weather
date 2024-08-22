@@ -1,5 +1,6 @@
 package com.example.androidweather;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -122,10 +123,11 @@ public class MainActivity extends AppCompatActivity implements ContentFragment.O
                 permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(android.Manifest.permission.READ_PHONE_STATE);
         }
-        if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.
-                permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
+//        if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.
+//                permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
+//            permissionList.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//        }
+
         if (!permissionList.isEmpty()) {
             String [] permissions = permissionList.toArray(new String[permissionList.
                     size()]);
