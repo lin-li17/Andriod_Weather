@@ -73,11 +73,11 @@ public class ContentFragment extends Fragment {
     private TextView todayLowTV3;
     private TextView todayHighTV3;
 
-    private String weatherNow1 = "https://api.seniverse.com/v3/weather/now.json?key=SX0YI9aO7VGVSFm0c&location=";
+    private String weatherNow1 = "https://api.seniverse.com/v3/weather/now.json?key=your_key&location=";
     private String weatherNow2 = "&language=zh-Hans&unit=c";
-    private String weatherDaily1 = "https://api.seniverse.com/v3/weather/daily.json?key=SX0YI9aO7VGVSFm0c&location=";
+    private String weatherDaily1 = "https://api.seniverse.com/v3/weather/daily.json?key=your_key&location=";
     private String weatherDaily2 = "&language=zh-Hans&unit=c&start=0&days=5";
-    private String weatherLife1 = "https://api.seniverse.com/v3/life/suggestion.json?key=SX0YI9aO7VGVSFm0c&location=";
+    private String weatherLife1 = "https://api.seniverse.com/v3/life/suggestion.json?key=your_key&location=";
     private String weatherLife2 = "&language=zh-Hans&days=5";
 
 
