@@ -215,6 +215,8 @@ public class MainActivity extends AppCompatActivity implements ContentFragment.O
             saveToFile(String.join(",",strArray));
             setCity1(strings[0]);
         }else strArray = new ArrayList<>();
+
+        viewPager2.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         //设置默认背景
         Picasso.get()
                 .load(R.drawable.bing)
@@ -249,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements ContentFragment.O
                 city = bdLocation.getCity().substring(0,bdLocation.getCity().length() - 1);
                 locationTV.setText(" ");
             }
-            if (!strArray.get(0).equals(city)){
+            if (strArray.size() == 0 || !strArray.get(0).equals(city)){
                 city1.setText(city);
                 if (pagerAdapter.getItemCount() < 1){
                     pagerAdapter.addData(new ContentFragment(city));
@@ -344,7 +346,8 @@ public class MainActivity extends AppCompatActivity implements ContentFragment.O
     //删除当前页面
     public void removeList(View view){
         int i = viewPager2.getCurrentItem();
-        if (pagerAdapter.removeData(i)){
+        if (pagerAdapter.removeData(i,viewPager2)){
+            viewPager2.setAdapter(pagerAdapter);
             viewPager2.setCurrentItem(i - 1);
             strArray.remove(i);
             saveToFile(String.join(",",strArray));

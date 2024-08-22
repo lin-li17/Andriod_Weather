@@ -116,6 +116,13 @@ public class ContentFragment extends Fragment {
             }
         });
 
+        ifTrueFile();
+        //在发送网络请求
+        sendRequestWithOkHttp();
+
+        return view;
+    }
+    private void ifTrueFile(){
         if(f.exists()) {
             //存在读取文件
             JSONObject jsonObject;
@@ -134,11 +141,8 @@ public class ContentFragment extends Fragment {
             jsonReading(readFromFile(city + "WeatherDailyData"), todayDateTV);
             jsonReading(readFromFile(city + "WeatherLifeData"), textView4);
         }
-        //在发送网络请求
-        sendRequestWithOkHttp();
-
-        return view;
     }
+
     //写数据准备
     private void jsonReading(String jsonData,View tv) {
         try {
@@ -357,6 +361,7 @@ public class ContentFragment extends Fragment {
                         @Override
                         public void run() {
                             // 更新 UI
+                            ifTrueFile();
                             sendRequestWithOkHttp();
                             swipeRefreshLayout.setRefreshing(false);
                         }
@@ -413,7 +418,10 @@ public class ContentFragment extends Fragment {
         weatherNowData.delete();
         weatherDailyData.delete();
         weatherLifeData.delete();
+        onDestroy();
     }
+
+
     //联网
     private void sendRequestWithOkHttp(){
         new Thread(new Runnable() {
@@ -458,6 +466,8 @@ public class ContentFragment extends Fragment {
             }
         }).start();
     }
+
+
     //以下是向main传递参数的代码
     public interface OnDataPass {
         void onDataPass(String data);
