@@ -40,7 +40,7 @@ public class searchActivity extends AppCompatActivity {
     //用户输入
     private String searchCityStr;
     //api
-    private String searchUrl = "https://api.seniverse.com/v3/location/search.json?key=SX0YI9aO7VGVSFm0c&q=";
+    private String searchUrl = "https://api.seniverse.com/v3/location/search.json?key=your_key&q=";
 
     private String searchCityUrl;//用来搜索的最终api
 
